@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
 
 const styles = {
   container: {
@@ -11,7 +10,7 @@ const styles = {
   fade: {
     position: 'relative',
     width: '100%',
-    minHeight: '20vh',
+    minHeight: '50vh',
     top: '-25px',
     backgroundImage: 'linear-gradient(0deg, transparent, black 75%)',
     zIndex: 1,
@@ -46,22 +45,10 @@ const styles = {
   }
 }
 
-
-
 class Crawl extends Component {
-  mergeStyles(defaultStyle, userStyle) {
-    if(!userStyle) {
-      return defaultStyle
-    } 
-
-    return Object.assign(defaultStyle, userStyle)
-  }
-
   render() {
     const {
-  
      
-      subTitleStyles,
       textStyles,
       title,
       text
@@ -75,7 +62,6 @@ class Crawl extends Component {
                 <div style={styles.crawl}>
                     <div style={styles.title}>
                         <p className='title'>{title}</p>
-                        <h1 className='subTitle' style={styles.subTitle}></h1>
                     </div>
                     <p className='text' style={textStyles}>{text}</p>
                 </div>

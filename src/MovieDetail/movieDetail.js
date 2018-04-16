@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
+
 import Crawl from '../CrawlAnime/crawl';
 import Preloader from '../Preloader/preloader'
-//import Characters from './characters';
+
 var btnStyle ={
     background:'black',
     fontSize:'30px',
     color:'gray',
     textAlign:'right',
-    padding:'20px',
-    
+    padding:'20px', 
 }
 var hide ={
     display:'none'
@@ -17,60 +17,43 @@ class MovieDetail extends Component {
     constructor(props){
         super(props)
         this.state = {
-            showCrawl: true,
-            loader:false,
-            details:[],
-            characters:[]
+            showCrawl: true,    //state to toggle or control crawl animation frame
+            loader:false,       //state for preloader
+            details:[],         // state to store movie details
+            characters:[]       //state to store characters fetched from detail store urls
         }
      this.handleClick = this.handleClick.bind(this);
-  
-  
     }
-   componentDidMount(){
-    fetch(`https://swapi.co/api/films/?search=${this.props.match.params.title}`).then((resp) => resp.json())
-    .then((results) => 
-         {
-           this.setState({details:results.results,loader:true},() => {
-               console.log(this.state.details)
-               results.results.map( movie => {
-                console.log(movie.characters)
-                let arr = [];
-                for(let i= 0;i<movie.characters.length;i++){
-                    fetch(movie.characters[i]).then((result) =>
-                    result.json()
-                    ).then(data => {
-                     arr.push(data);
-                     this.setState({characters:arr},() => console.log("state",this.state.characters))
+    componentDidMount() {
+        //get movie data which matches search string
+        fetch(`https://swapi.co/api/films/?search=${this.props.match.params.title}`)
+            .then((resp) => resp.json())
+            .then((results) => {
+                this.setState({ details: results.results, loader: true }, () => {
+                    results.results.map(movie => {
+                        let characterArray = [];
+                        // loop through the character urls 
+                        for (let i = 0; i < movie.characters.length; i++) {
+                            fetch(movie.characters[i]).then((result) =>
+                                result.json()
+                            ).then(data => {
+                                characterArray.push(data);
+                                this.setState({ characters: characterArray }) //assign the array to state
+                            });
+                        }
+                        return false;
                     });
-                }
-                    // fetch(characterUrl).then(resp =>(resp.json()))
-                    //     .then(data => {
-                    //         this.setState({
-                    //             characters:data
-                    //         },() =>console.log(this.state.characters))
-                    //     })
-                    
-            
-                })
-        
-        });
-       
-         }
-     
-    )
-   
- 
-   }
+                });
+            });  
+    }
   
-    
-   
    handleClick(){
-      this.setState({showCrawl:false})
+      this.setState({showCrawl:false}); //on click of cross hide the crawl animation
    }
 
     render(){
         if(this.state.loader){
-            setTimeout(() => {this.setState({showCrawl: false})}, 5000)
+            setTimeout(() => {this.setState({showCrawl: false})},8000) //hide the animation after 8 sec
         }
       
         if(!this.state.loader){
@@ -78,62 +61,55 @@ class MovieDetail extends Component {
         }
         return(
             <div> 
-              
                {
-                   this.state.details.map((list) =>{
-                       return(
-                           <div>
-                               <div style ={this.state.showCrawl?btnStyle:hide}>
-                                   <span onClick ={this.handleClick} style={{cursor:'pointer'}}>X</span>
-                               </div>
-                               {
-                                   this.state.showCrawl ?
+                this.state.details.map((list,index) =>{
+                    return(
+                        <div key={'mykey'+index}>
+                            <div style ={this.state.showCrawl ? btnStyle : hide}>
+                                <span onClick ={this.handleClick} style={{cursor:'pointer'}}>X</span>
+                            </div>
+                            {   //ternary operator to show respective 
+                             this.state.showCrawl ?
                                 <Crawl
-                                  
                                   title= {list.title}
-                                 
                                   text= {list.opening_crawl}
-                              
-                              />:
-                              <div>
-                              <table className ="movieDetailTable">
+                                />:
+                              <div className ="movieDetailTable">
+                               <h2>Movie Detail</h2>
+                               <table>
+                                <tbody>
                                   <tr>
-                                      <th>Title:</th>
+                                      <th>Title</th>
                                       <td>{list.title}</td>
                                   </tr>
                                   <tr>
-                                      <th>Director:</th>
+                                      <th>Director</th>
                                       <td>{list.director}</td>
                                   </tr>
                                   <tr>
-                                      <th>Producer:</th>
+                                      <th>Producer</th>
                                       <td>{list.producer}</td>
                                   </tr>
                                   <tr>
-                                      <th>Release Date:</th>
+                                      <th>Release Date</th>
                                       <td>{list.release_date}</td>
                                   </tr>
                                   <tr>
-                                      <th>Characters:</th>
+                                      <th>Characters</th>
                                       <td className ="charList">
-                                       {
-                                         this.state.characters.map((character) =>{
-
+                                       { 
+                                         this.state.characters.map((character,index) =>{
                                             return (
-                                             <tr><td> {character.name}</td>     </tr>
+                                             <span key={character.name}> {index+1}.{ character.name}</span>
                                            )
-                                          
                                          })
                                        }
-                                    </td>
-                                    
+                                     </td>
                                   </tr>
-                                
-                              </table>
-
-                          </div>
-                               }
-                              
+                                 </tbody>
+                               </table>
+                             </div>
+                            }    
                            </div>
                        )
                    })
@@ -142,7 +118,5 @@ class MovieDetail extends Component {
         )
     }
 }
-
-
 
 export default MovieDetail
