@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Crawl from '../CrawlAnime/crawl';
+import Preloader from '../Preloader/preloader'
 //import Characters from './characters';
 var btnStyle ={
     background:'black',
@@ -29,7 +30,7 @@ class MovieDetail extends Component {
     fetch(`https://swapi.co/api/films/?search=${this.props.match.params.title}`).then((resp) => resp.json())
     .then((results) => 
          {
-           this.setState({details:results.results},() => {
+           this.setState({details:results.results,loader:true},() => {
                console.log(this.state.details)
                results.results.map( movie => {
                 console.log(movie.characters)
@@ -68,9 +69,12 @@ class MovieDetail extends Component {
    }
 
     render(){
-        setTimeout(() => {this.setState({showCrawl: false})}, 5000)
+        if(this.state.loader){
+            setTimeout(() => {this.setState({showCrawl: false})}, 5000)
+        }
+      
         if(!this.state.loader){
-            return <div>Loading</div>
+            return <Preloader/>
         }
         return(
             <div> 
@@ -90,41 +94,46 @@ class MovieDetail extends Component {
                                  
                                   text= {list.opening_crawl}
                               
-                              />:null
-                               }
-                               <div>
-                                   <table>
-                                       <tr>
-                                           <th>Title:</th>
-                                           <td>{list.title}</td>
-                                       </tr>
-                                       <tr>
-                                           <th>Director:</th>
-                                           <td>{list.director}</td>
-                                       </tr>
-                                       <tr>
-                                           <th>Producer:</th>
-                                           <td>{list.producer}</td>
-                                       </tr>
-                                       <tr>
-                                           <th>Release Date:</th>
-                                           <td>{list.release_date}</td>
-                                       </tr>
-                                       <tr>
-                                           <th>Characters:</th>
-                                           <tr>
-                                        {
-                                            this.state.characters.map((character) =>{
-                                                return <td> {character.name}</td>
-                                            })
-                                        }
-                                           </tr>
-                                         
-                                       </tr>
-                                     
-                                   </table>
+                              />:
+                              <div>
+                              <table className ="movieDetailTable">
+                                  <tr>
+                                      <th>Title:</th>
+                                      <td>{list.title}</td>
+                                  </tr>
+                                  <tr>
+                                      <th>Director:</th>
+                                      <td>{list.director}</td>
+                                  </tr>
+                                  <tr>
+                                      <th>Producer:</th>
+                                      <td>{list.producer}</td>
+                                  </tr>
+                                  <tr>
+                                      <th>Release Date:</th>
+                                      <td>{list.release_date}</td>
+                                  </tr>
+                                  <tr>
+                                      <th>Characters:</th>
+                                      <td className ="charList">
+                                       {
+                                         this.state.characters.map((character) =>{
 
-                               </div>
+                                            return (
+                                             <tr><td> {character.name}</td>     </tr>
+                                           )
+                                          
+                                         })
+                                       }
+                                    </td>
+                                    
+                                  </tr>
+                                
+                              </table>
+
+                          </div>
+                               }
+                              
                            </div>
                        )
                    })

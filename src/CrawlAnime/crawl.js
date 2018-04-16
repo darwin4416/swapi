@@ -44,7 +44,6 @@ const styles = {
     margin: '0 0 100px',
     textTransform: 'uppercase',
   }
-
 }
 
 
@@ -60,64 +59,31 @@ class Crawl extends Component {
 
   render() {
     const {
-      children,
-      containerStyles,
-      fadeStyles,
-      textContainerStyles,
-      crawlStyles,
-      titleStyles,
+  
+     
       subTitleStyles,
       textStyles,
       title,
-      subTitle,
       text
     } = this.props
 
-    return (
-       
-      <div className='crawler' style={this.mergeStyles(styles.container, containerStyles)}>
-      
-        <div style={this.mergeStyles(styles.fade, fadeStyles)}>
-        
-        </div>
-     
-        <section style={this.mergeStyles(styles.textContainer, textContainerStyles)}>
-       
-          <div style={this.mergeStyles(styles.crawl, crawlStyles)}>
-          
-            <div style={this.mergeStyles(styles.title, titleStyles)}>
-              <p className='title'>{title}</p>
-              <h1 className='subTitle' style={this.mergeStyles(styles.subTitle, subTitleStyles)}>{subTitle}</h1>
+    return (   
+        <div className='crawler' style={styles.container}>
+            <div style={styles.fade}>
             </div>
-            <p className='text' style={textStyles}>{text}</p>
-            {children}
-          </div>
-        </section>
-      </div>
+            <section style={styles.textContainer}>
+                <div style={styles.crawl}>
+                    <div style={styles.title}>
+                        <p className='title'>{title}</p>
+                        <h1 className='subTitle' style={styles.subTitle}></h1>
+                    </div>
+                    <p className='text' style={textStyles}>{text}</p>
+                </div>
+            </section>
+        </div>
     )
   }
 } 
 
-Crawl.PropTypes = {
-  /**
-   * Any nodes in addition to provided text
-   */
-  children: PropTypes.node,
-  /**
-   * Override the inline-styles of the various elements.
-   */
-  containerStyles: PropTypes.object,
-  textContainerStyles: PropTypes.object,
-  crawlStyles: PropTypes.object,
-  titleStyles: PropTypes.object,
-  subTitleStyles: PropTypes.object,
-  textStyles: PropTypes.object,
-  /*
-   * Texts
-   */
-  title: PropTypes.string,
-  subTitle: PropTypes.string,
-  text: PropTypes.string
-};
 
 export default Crawl

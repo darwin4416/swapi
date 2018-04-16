@@ -20,7 +20,7 @@ class App extends Component {
   
   getInputData(serachStr){
     console.log(serachStr);
-     this.setState({toggleTable:true})
+    
     // fetch(`https://swapi.co/api/films`).then((resp) => resp.json())
     // .then((results) => this.setState({movieListUrls:results},() => console.log(this.state.movieListUrls)))
   //  fetch(`https://swapi.co/api/people/?search=${serachStr}`).then((resp) => resp.json())
@@ -32,7 +32,7 @@ class App extends Component {
      fetch(`https://swapi.co/api/films/?search=${serachStr}`).then((resp) => resp.json())
      .then((results) => 
           {
-            this.setState({movieListUrls:results.results},()=>console.log(this.state.movieListUrls))
+            this.setState({movieListUrls:results.results,toggleTable:true},()=>console.log(this.state.movieListUrls))
           }
       
      )
