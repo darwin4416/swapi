@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './images/star-war.jpg';
 import './App.css';
 import {BrowserRouter as Router} from 'react-router-dom';
 import Route from 'react-router-dom/Route';
@@ -12,7 +12,7 @@ class App extends Component {
     this.state = {
       searchStr:'',
       movieListUrls:[],
-      avg:[]
+      toggleTable: false
       
     }
     this.getInputData = this.getInputData.bind(this);
@@ -20,6 +20,7 @@ class App extends Component {
   
   getInputData(serachStr){
     console.log(serachStr);
+     this.setState({toggleTable:true})
     // fetch(`https://swapi.co/api/films`).then((resp) => resp.json())
     // .then((results) => this.setState({movieListUrls:results},() => console.log(this.state.movieListUrls)))
   //  fetch(`https://swapi.co/api/people/?search=${serachStr}`).then((resp) => resp.json())
@@ -46,14 +47,21 @@ class App extends Component {
   render() {
     return (
       <Router>
-      <div className ="app">
+      <div>
+     
       <Route path="/" exact strict render={
         ()=>{
           return(
             <div className="App">
-            <Search inputHandler = {this.getInputData}/> 
-            <Lists movieList = {this.state.movieListUrls}/>    
-       </div>
+             <img src ={logo} className="logo"/>
+              <Search inputHandler={this.getInputData} />
+              {
+                this.state.toggleTable ?
+                <Lists movieList={this.state.movieListUrls} />
+                :null
+              }
+             
+            </div>
           )
         }
       }/> 
@@ -64,5 +72,6 @@ class App extends Component {
     );
   }
 }
+
 
 export default App;

@@ -10,18 +10,18 @@ class Lists extends Component {
             inputField: ''
           };
     }
-    componentDidMount(){
+    componentWillMount(){
         console.log(this.props.movieList)
     }
     render(){
         return(
           
             <div>
-                <table>
+                <table className ="movieList">
                     <thead>
                         <tr>
-                            <td>Movie Name</td>
-                            <td>Release year</td>
+                            <th>Movie Name</th>
+                            <th>Release year</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -29,8 +29,8 @@ class Lists extends Component {
                        {this.props.movieList.map((l) => {
 
                             return (<tr key ={l.ObjectId}>
-                                    <Link to={`/movie/${l.title}`}><td >{l.title}</td></Link>
-                                    <td >{l.release_date}</td>
+                                    <td > <Link to={`/movie/${l.title}`}>{l.title}</Link></td>
+                                    <td >{l.release_date.slice(0,4)}</td>
                                   </tr>
                         )})} 
                         
